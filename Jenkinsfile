@@ -3,7 +3,7 @@
 podTemplate(label: 'k8s', containers: [
     containerTemplate(name: 'python', image: 'python3:latest', ttyEnabled: true)
   ]) {
-    node ('python') {
+    node ('k8s') {
         stage 'Check out demo repo'
         git 'https://github.com/dictvm/nexus_checker.git'
         container('alpine') {
