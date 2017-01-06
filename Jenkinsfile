@@ -1,4 +1,4 @@
-# vim: :set syntax=groovy
+// vim: :set syntax=groovy
 
 podTemplate(label: 'k8s', containers: [
     containerTemplate(name: 'python', image: 'python3:latest', ttyEnabled: true)
