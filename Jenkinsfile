@@ -1,14 +1,13 @@
 // vim: :set syntax=groovy
 
-podTemplate(label: 'k8s', containers: [
-    containerTemplate(name: 'python', image: 'frolvlad/alpine-python3', ttyEnabled: true)
-  ]) {
-    node ('python') {
+podTemplate(label: 'demopod', containers: [
+    containerTemplate(name: 'alpine', image: 'alpine:latest', ttyEnabled: true)
+  ],
+    node ('demopod') {
         stage 'Check out demo repo'
         git 'https://github.com/dictvm/nexus_checker.git'
-        container('python') {
+        container('alpine') {
             stage 'Install requirements'
             sh 'pip3 install -r requirements.txt'
     }
-  }
 }
