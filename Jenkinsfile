@@ -6,7 +6,7 @@ podTemplate(label: 'k8s', containers: [
     node ('k8s') {
         stage 'Check out demo repo'
         git 'https://github.com/dictvm/nexus_checker.git'
-        container('alpine') {
+        container('python') {
             stage 'Install requirements'
             sh 'pip3 install -r requirements.txt'
     }
