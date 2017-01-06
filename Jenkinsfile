@@ -1,6 +1,6 @@
 podTemplate(label: 'demopod', containers: [
     containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:2.62-alpine', args: '${computer.jnlpmac} ${computer.name}'),
-    containerTemplate(name: 'alpine', image: 'alpine3:latest', ttyEnabled: true,
+    containerTemplate(name: 'alpine', image: 'alpine:latest', ttyEnabled: true,
     command: 'echo "foo"')
   ],
     node ('demopod') {
