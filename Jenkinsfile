@@ -8,6 +8,6 @@ podTemplate(label: 'demopod', containers: [
         git 'https://github.com/dictvm/k8s-jenkins-playground.git'
         container('alpine') {
             stage 'Build a demo project'
-            sh 'echo "foo"'
+            sh 'echo "this should run inside of a pod"'
     }
 }
