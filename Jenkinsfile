@@ -1,3 +1,5 @@
+# vim: :set syntax=groovy
+
 podTemplate(label: 'demopod', containers: [
     containerTemplate(name: 'alpine', image: 'alpine:latest', ttyEnabled: true)
   ]) {
