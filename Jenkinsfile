@@ -1,7 +1,7 @@
 // vim: :set syntax=groovy
 
 podTemplate(label: 'k8s', containers: [
-    containerTemplate(name: 'python', image: 'python3:latest', ttyEnabled: true)
+    containerTemplate(name: 'python', image: 'frolvlad/alpine-python3', ttyEnabled: true)
   ]) {
     node ('python') {
         stage 'Check out demo repo'
