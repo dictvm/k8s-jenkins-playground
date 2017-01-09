@@ -6,10 +6,10 @@ podTemplate(label: 'k8s', containers: [
   ]) {
     node ('k8s') {
         stage 'Check out demo repo'
-        git 'https://github.com/dictvm/nexus_checker.git'
+        git 'https://github.com/dictvm/k8s-jenkins-playground'
         container('alpine') {
             stage 'Install requirements'
-            sh 'sleep 60s, echo "yay"'
+            sh 'echo foo && sleep 600s'
     }
   }
 }
