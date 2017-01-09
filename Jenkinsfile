@@ -1,9 +1,9 @@
 // vim: set ft=groovy:
 
-podTemplate(label: 'k8s', containers: [
+podTemplate(label: 'demopod', containers: [
     containerTemplate(name: 'python', image: 'python3:latest', ttyEnabled: true)
   ]) {
-    node ('python') {
+    node ('demopod') {
         stage 'Check out demo repo'
         git 'https://github.com/dictvm/nexus_checker.git'
         container('python') {
