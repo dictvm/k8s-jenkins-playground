@@ -1,7 +1,8 @@
 // vim: set ft=groovy:
 
 podTemplate(label: 'k8s', containers: [
-    containerTemplate(name: 'alpine', image: 'alpine:latest', ttyEnabled: true)
+    containerTemplate(name: 'alpine', image: 'alpine:latest', ttyEnabled: true,
+    command: 'cat')
   ]) {
     node ('k8s') {
         stage 'Check out demo repo'
