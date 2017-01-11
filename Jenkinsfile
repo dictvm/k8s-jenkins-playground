@@ -10,7 +10,7 @@ podTemplate(label: 'kubernetes', containers: [
         git 'https://github.com/dictvm/nexus_checker.git'
         container('python') {
             stage 'Install requirements'
-            sh 'pip3 -r requirements.txt'
+            sh 'pip3 install -r requirements.txt'
     }
   }
 }
