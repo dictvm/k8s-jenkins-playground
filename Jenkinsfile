@@ -1,16 +1,26 @@
+#!/usr/bin/env groovy
 // vim: set ft=groovy:
 
 podTemplate(label: 'kubernetes', containers: [
-//    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
-    [name: 'python', image: 'python:3-alpine', ttyEnabled: true, command: 'cat']
-  ]) {
+    //    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
+    [
+    name: 'docker',
+    image: 'docker/compose',
+    ttyEnabled: true,
+    command: 'cat'
+    ],
+    volumes: 
+    [
+    [$class: 'HostPathVolume', mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock']
+    ]
+]) {
 
-    node ('kubernetes') {
-        stage 'Check out demo repo'
-        git 'https://github.com/dictvm/nexus_checker.git'
-        container('python') {
-            stage 'Install requirements'
-            sh 'pip3 install -r requirements.txt'
-    }
+  node ('kubernetes') {
+    stage 'Check out demo repo'
+      git 'https://github.com/digitalocean/netbox.git'
+      container('docker') {
+        stage 'Install requirements'
+            sh 'docker-compose up'
+      }
   }
 }
