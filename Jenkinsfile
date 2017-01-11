@@ -1,7 +1,7 @@
 // vim: set ft=groovy:
 
 podTemplate(label: 'kubernetes', containers: [
-#    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
+//    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
     [name: 'python', image: 'python:3-alpine', ttyEnabled: true, command: 'cat']
   ]) {
 
