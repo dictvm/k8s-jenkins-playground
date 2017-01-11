@@ -3,14 +3,9 @@
 
 podTemplate(label: 'kubernetes', containers: [
     //    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
-    name: 'docker',
-    image: 'docker/compose',
-    ttyEnabled: true,
-    command: 'cat'
-    ],
-    volumes: 
-    [
-    [$class: 'HostPathVolume', mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock']
+    [name: 'python', image: 'python:3-alpine', ttyEnabled: true, command:
+    'cat'],
+    [name: 'docker', image: 'docker/compose', ttyEnabled: true, command: 'cat']
   
 ]) {
 
