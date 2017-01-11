@@ -3,7 +3,6 @@
 
 podTemplate(label: 'kubernetes', containers: [
     //    [name: 'jnlp', image: 'jenkinsci/jnlp-slave:latest', args: '${computer.jnlpmac} ${computer.name}'],
-    [
     name: 'docker',
     image: 'docker/compose',
     ttyEnabled: true,
@@ -12,7 +11,7 @@ podTemplate(label: 'kubernetes', containers: [
     volumes: 
     [
     [$class: 'HostPathVolume', mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock']
-    ]
+  
 ]) {
 
   node ('kubernetes') {
