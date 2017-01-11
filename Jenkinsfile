@@ -5,7 +5,11 @@ podTemplate(label: 'kubernetes', containers: [
     [name: 'python', image: 'python:3-alpine', ttyEnabled: true]
   ]) {
 
-    node('jnlp-slave') {} 
+    node('kubernetes') {
+      stage 'Prepare jnlp slave'
+      container('jnlp')
+    } 
+
     node ('kubernetes') {
         stage 'Check out demo repo'
         git 'https://github.com/dictvm/nexus_checker.git'
