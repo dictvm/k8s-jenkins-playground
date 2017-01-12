@@ -6,12 +6,19 @@ podTemplate(label: 'kubernetes', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-  node ('kubernetes') {
-    stage 'Check out demo repo'
-      git 'https://github.com/digitalocean/netbox.git'
-      container('docker') {
-        stage 'Install requirements'
-          sh 'docker-compose up'
-      }
+
+stage 'Build'
+node ('kubernetes') {
+  try {
+    git 'https://github.com/digitalocean/netbox.git'
+    container('docker') {
+    sh 'docker-compose build --pull'
+    sh 'docker compose run --rm netbox manage.py test netbox/'
+  } catch(err) {
+    sh 'docker-compose down -v --remove-orphans'
+    throw err
+  } finally {
+    sh 'docker-compose down -v --remove-orphans'
   }
+ }
 }
