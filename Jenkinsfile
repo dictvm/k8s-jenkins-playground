@@ -26,7 +26,8 @@ stage 'Test'
 node ('kubernetes') {
     container('docker') {
       try {
-          sh 'docker compose run --rm netbox manage.py test netbox/'
+          sh 'cd $WORKSPACE/netbox'
+          sh 'docker-compose run --rm netbox manage.py test netbox/'
       } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
         throw err
