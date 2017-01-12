@@ -10,15 +10,15 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 stage 'Testing'
 node ('kubernetes') {
   try {
-    container('docker')
     git 'https://github.com/digitalocean/netbox.git'
-    sh 'docker-compose build --pull'
-    sh 'docker compose run --rm netbox manage.py test netbox/'
+    container('docker')
+      sh 'docker-compose build --pull'
+      sh 'docker compose run --rm netbox manage.py test netbox/'
   } catch(err) {
-    sh 'docker-compose down -v --remove-orphans'
+      sh 'docker-compose down -v --remove-orphans'
     throw err
   } finally {
-    sh 'docker-compose down -v --remove-orphans'
+      sh 'docker-compose down -v --remove-orphans'
   }
  }
 }
