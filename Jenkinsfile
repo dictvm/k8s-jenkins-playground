@@ -12,7 +12,6 @@ node ('kubernetes') {
     container('docker') {
       try {
           git 'https://github.com/digitalocean/netbox.git'
-          sh 'cd $WORKSPACE/netbox'
           sh 'docker-compose build --pull'
       } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
