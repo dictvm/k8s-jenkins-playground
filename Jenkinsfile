@@ -13,8 +13,6 @@ node ('kubernetes') {
       try {
           git 'https://github.com/digitalocean/netbox.git'
           sh 'docker-compose build --pull'
-    //      sh 'docker compose run --rm netbox manage.py test netbox/'
-      
       } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
         throw err
@@ -23,4 +21,19 @@ node ('kubernetes') {
    }
   } // container
  } // node
+
+stage 'Test'
+node ('kubernetes') {
+    container('docker') {
+      try {
+          sh 'docker compose run --rm netbox manage.py test netbox/'
+      } catch(err) {
+          sh 'docker-compose down -v --remove-orphans'
+        throw err
+      } finally {
+          sh 'docker-compose down -v --remove-orphans'
+   }
+  } // container
+ } // node
+
 } // end
