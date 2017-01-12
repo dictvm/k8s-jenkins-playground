@@ -7,33 +7,34 @@ podTemplate(label: 'kubernetes', containers: [
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
 
-stage 'Build'
-node ('kubernetes') {
-    container('docker') {
-      try {
+  stage 'Build'
+    node ('kubernetes') {
+      container('docker') {
+        try {
           git 'https://github.com/digitalocean/netbox.git'
           sh 'docker-compose build --pull'
-      } catch(err) {
+        } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
-        throw err
-      } finally {
+          throw err
+        } finally {
           sh 'docker-compose down -v --remove-orphans'
-   }
-  } // container
- } // node
+        }
+      } // container
+    } // node
 
-stage 'Test'
-node ('kubernetes') {
-    container('docker') {
-      try {
+  stage 'Test'
+    node ('kubernetes') {
+      container('docker') {
+        try {
+          sh 'docker-compose build --pull'
           sh 'docker-compose run --rm netbox manage.py test netbox/'
-      } catch(err) {
+        } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
-        throw err
-      } finally {
+          throw err
+        } finally {
           sh 'docker-compose down -v --remove-orphans'
-   }
-  } // container
- } // node
+        }
+      } // container
+    } // node
 
 } // end
