@@ -12,7 +12,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         try {
           git 'https://github.com/digitalocean/netbox.git'
           sh 'docker-compose build --pull'
-          sh 'docker-compose run --rm netbox manage.py test netbox/'
+          sh 'docker-compose start'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
           throw err
