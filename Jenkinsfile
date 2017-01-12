@@ -6,7 +6,6 @@ podTemplate(label: 'kubernetes', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-
   stage 'Build'
     node ('kubernetes') {
       container('docker') {
@@ -26,7 +25,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     node ('kubernetes') {
       container('docker') {
         try {
-          sh 'docker-compose build --pull'
+          sh 'cd netbox'
           sh 'docker-compose run --rm netbox manage.py test netbox/'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
