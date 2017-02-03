@@ -9,20 +9,26 @@ podTemplate(label: 'slavebuild', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-stage 'Vaulttest'
+stage ('Pull Secrets') {
     node ('slavebuild') {
         container('docker') {
             def secrets = [
                 [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
-                    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
-                        'password'
-                        ]
+                    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
                     ]
                 ]
             ]
             wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
                 sh 'echo $FORECAST_PASSWORD'
             }
+        }
+    }
+}
+
+
+stage ('Build') {
+    node ('slavebuild') {
+        container('docker') {
             try {
                 git 'https://github.com/digitalocean/netbox.git'
                 sh 'docker-compose build --pull'
@@ -36,6 +42,6 @@ stage 'Vaulttest'
                 docker-compose down -v --remove-orphans
                 """
             }
-        } // container
-    } // node
-} // end
+        } 
+    } 
+}
