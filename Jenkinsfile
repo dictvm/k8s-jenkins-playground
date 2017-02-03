@@ -40,5 +40,5 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
          }
        } // container
      } // node
-
+  } //node
 } // end
