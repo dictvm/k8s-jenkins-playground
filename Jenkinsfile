@@ -13,6 +13,8 @@ pipeline {
     agent any
         stages { 
             stage ('Gather Secrets') {
+            node ('slavebuild') {
+            container('docker') {
                 def secrets = [
                     [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
                         [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
@@ -23,6 +25,8 @@ pipeline {
                 wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
                     sh 'echo $FORECAST_PASSWORD'
                 }
+            }
+            }
             }
             stage ('Build Image') {
             node ('slavebuild') {
