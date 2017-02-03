@@ -10,7 +10,7 @@ podTemplate(label: 'kubernetes', containers: [
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
   stage ('Pull Secrets')
-//  node ('kubernetes') {
+  node ('kubernetes') {
 //    container('docker') {
       def secrets = [
         [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
@@ -22,7 +22,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         sh 'echo $FORECAST_PASSWORD'
       }
 //    }
-//  }
+  }
   
   
   stage ('Build')
