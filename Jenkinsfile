@@ -9,30 +9,33 @@ podTemplate(label: 'slavebuild', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-  stage 'Vaulttest'
-     node ('slavebuild') {
-       container('docker') {
-         def secrets = [
-             [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
-                 [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
-                 'password']]]
-         ]
-         wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-             sh 'echo $FORECAST_PASSWORD'
-         }
-         try {
-           git 'https://github.com/digitalocean/netbox.git'
-           sh 'docker-compose build --pull'
-           sh 'docker-compose up -d'
-         } catch(err) {
-           sh 'docker-compose down -v --remove-orphans'
-           throw err
-         } finally {
-           sh """
-           echo $FORECAST_PASSWORD
-           docker-compose down -v --remove-orphans
-           """
-         }
-       } // container
-     } // node
+stage 'Vaulttest'
+    node ('slavebuild') {
+        container('docker') {
+            def secrets = [
+                [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
+                    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
+                        'password'
+                        ]
+                    ]
+                ]
+            ]
+            wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+                sh 'echo $FORECAST_PASSWORD'
+            }
+            try {
+                git 'https://github.com/digitalocean/netbox.git'
+                sh 'docker-compose build --pull'
+                sh 'docker-compose up -d'
+            } catch(err) {
+                sh 'docker-compose down -v --remove-orphans'
+                throw err
+            } finally {
+                sh """
+                echo $FORECAST_PASSWORD
+                docker-compose down -v --remove-orphans
+                """
+            }
+        } // container
+    } // node
 } // end
