@@ -12,7 +12,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 pipeline {
     agent any
         stages { 
-            stage 'Gather Secrets' {
+            stage ('Gather Secrets') {
                 def secrets = [
                     [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
                         [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
@@ -24,7 +24,7 @@ pipeline {
                     sh 'echo $FORECAST_PASSWORD'
                 }
             }
-            stage 'Build Image' {
+            stage ('Build Image') {
             node ('slavebuild') {
             container('docker') {
                 steps {
