@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 // vim: set ft=groovy:
 
-podTemplate(label: 'slavebuild', containers: [
+podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
     name: 'docker',
     image: 'docker/compose:1.9.0',
@@ -10,8 +10,8 @@ podTemplate(label: 'slavebuild', containers: [
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
   stage ('Pull Secrets')
-  node ('slavebuild') {
-    container('docker') {
+//  node ('kubernetes') {
+//    container('docker') {
       def secrets = [
         [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
           [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
@@ -21,12 +21,12 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
         sh 'echo $FORECAST_PASSWORD'
       }
-    }
-  }
+//    }
+//  }
   
   
   stage ('Build')
-  node ('slavebuild') {
+  node ('kubernetes') {
     container('docker') {
       try {
         git 'https://github.com/digitalocean/netbox.git'
