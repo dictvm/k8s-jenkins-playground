@@ -10,8 +10,10 @@ podTemplate(label: 'slavebuild', containers: [
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')])
 
 pipeline {
-    agent label ('slavebuild') { 
+    agent any
         stages { 
+            node ('slavebuild') {
+            container('docker') {
             stage 'Gather Secrets' {
                 def secrets = [
                     [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
