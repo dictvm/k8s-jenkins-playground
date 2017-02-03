@@ -7,7 +7,7 @@ podTemplate(label: 'slavebuild', containers: [
         image: 'docker/compose:1.9.0',
     )
 ],
-volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
+volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')])
 
 pipeline {
     agent label ('slavebuild') { 
@@ -44,4 +44,3 @@ pipeline {
         } // stages
     } // agent
 } // pipeline
-} // end
