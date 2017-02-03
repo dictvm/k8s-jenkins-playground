@@ -9,7 +9,7 @@ podTemplate(label: 'slavebuild', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-stage ('Pull Secrets') {
+stage ('Pull Secrets')
     node ('slavebuild') {
         container('docker') {
             def secrets = [
@@ -23,10 +23,9 @@ stage ('Pull Secrets') {
             }
         }
     }
-}
 
 
-stage ('Build') {
+stage ('Build')
     node ('slavebuild') {
         container('docker') {
             try {
@@ -44,4 +43,3 @@ stage ('Build') {
             }
         } 
     } 
-}
