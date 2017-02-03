@@ -12,8 +12,6 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 pipeline {
     agent any
         stages { 
-            node ('slavebuild') {
-            container('docker') {
             stage 'Gather Secrets' {
                 def secrets = [
                     [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
@@ -27,6 +25,8 @@ pipeline {
                 }
             }
             stage 'Build Image' {
+            node ('slavebuild') {
+            container('docker') {
                 steps {
                     try {
                         git 'https://github.com/digitalocean/netbox.git'
