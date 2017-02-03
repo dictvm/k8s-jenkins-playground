@@ -40,9 +40,9 @@ pipeline {
                docker-compose down -v --remove-orphans
                """
              }
-           } // container
-         } // node
-       } // stage
-     } // stages
+          } // container
+        } // node
+      } // stage
+    } // stages
   } // agent
 } // pipeline
