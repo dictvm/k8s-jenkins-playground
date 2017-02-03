@@ -43,6 +43,7 @@ pipeline {
                     }
                  } // steps
             } // stage
-        } // stages
-    } // agent
+        } // container
+    } // node
+} // stages
 } // pipeline
