@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-#!groovy // maybe this is better?
 // vim: set ft=groovy:
 
 podTemplate(label: 'slavebuild', containers: [
