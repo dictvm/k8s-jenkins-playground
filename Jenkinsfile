@@ -7,8 +7,10 @@ def secrets = [
 //    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
 //    ]
 //  ]
-  [$class: 'VaultSecret', path: 'secret/forecast/user', secretValues: [
+  [$class: 'VaultSecret', path: 'secret/forecast', secretValues: [
     [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user']
+    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
+    'password']
     ]
   ]
 ]
@@ -28,6 +30,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       container('docker') {
         wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
           sh 'echo $FORECAST_USER'
+          sh 'echo $FORECAST_PASSWORD'
         }
       }
     }
@@ -40,6 +43,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         try {
           git 'https://github.com/digitalocean/netbox.git'
           sh 'echo $FORECAST_USER'
+          sh 'echo $FORECAST_PASSWORD'
           sh 'docker-compose build --pull'
           sh 'docker-compose up -d'
         } catch(err) {
