@@ -11,20 +11,20 @@ podTemplate(label: 'kubernetes', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-  stage ('Pull Secrets')
-  node ('kubernetes') {
-    container('docker') {
-      def secrets = [
-        [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
-          [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
-          ]
-        ]
-      ]
-      wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-        sh 'echo $FORECAST_PASSWORD'
-      }
-    }
-  }
+//  stage ('Pull Secrets')
+//  node ('kubernetes') {
+//    container('docker') {
+//      def secrets = [
+//        [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
+//          [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
+//          ]
+//        ]
+//      ]
+//      wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+//        sh 'echo $FORECAST_PASSWORD'
+//      }
+//    }
+//  }
   
   
   stage ('Build')
