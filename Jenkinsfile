@@ -3,14 +3,15 @@
 
 def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
 def secrets = [
-//  [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
-//    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
-//    ]
-//  ]
   [$class: 'VaultSecret', path: 'secret/forecast', secretValues: [
-    [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user']
-    [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:
-    'password']
+    [$class: 'VaultSecretValue',
+      envVar: 'FORECAST_USER',
+      vaultKey: 'user'
+      ]
+    [$class: 'VaultSecretValue',
+      envVar: 'FORECAST_PASSWORD',
+      vaultKey: 'password'
+      ]
     ]
   ]
 ]
@@ -25,7 +26,7 @@ podTemplate(label: 'kubernetes', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-  stage ('Pull Secrets') {
+  stage ('Wrap Secrets') {
     node ('kubernetes') {
       container('docker') {
         wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
@@ -44,8 +45,8 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
           git 'https://github.com/digitalocean/netbox.git'
           sh 'echo $FORECAST_USER'
           sh 'echo $FORECAST_PASSWORD'
-          sh 'docker-compose build --pull'
-          sh 'docker-compose up -d'
+//          sh 'docker-compose build --pull'
+//          sh 'docker-compose up -d'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
           throw err
