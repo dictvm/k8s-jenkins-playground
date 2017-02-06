@@ -3,8 +3,11 @@
 
 def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
 def secrets = [
-  [$class: 'VaultSecret', path: 'secret/forecast', secretValues: [
+  [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
     [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
+    ]
+  ]
+  [$class: 'VaultSecret', path: 'secret/forecast/user', secretValues: [
     [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user']
     ]
   ]
