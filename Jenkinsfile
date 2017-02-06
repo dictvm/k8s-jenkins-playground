@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 // vim: set ft=groovy:
 
+def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
+
 podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
     name: 'docker',
@@ -30,16 +32,13 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     container('docker') {
       try {
         git 'https://github.com/digitalocean/netbox.git'
-        sh 'docker-compose build --pull'
+        sh 'echo $FORECAST_PASSWORD && docker-compose build --pull}'
         sh 'docker-compose up -d'
       } catch(err) {
         sh 'docker-compose down -v --remove-orphans'
         throw err
       } finally {
-        sh """
-        echo $FORECAST_PASSWORD
-        docker-compose down -v --remove-orphans
-        """
+        sh "docker-compose down -v --remove-orphans"
       }
     } 
   } 
