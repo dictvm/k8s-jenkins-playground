@@ -16,6 +16,9 @@ podTemplate(label: 'kubernetes', containers: [
     image: 'docker/compose:1.10.0',
     ttyEnabled: true,
     command: 'cat'
+    envVars: [
+      containerEnvVar(key: 'FORECAST_USER', value: '${password}')
+    ]
   )
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
@@ -31,16 +34,15 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     }
   }
   
-  
   stage ('Build') {
     node ('kubernetes') {
       container('docker') {
         try {
           wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
-            git 'https://github.com/digitalocean/netbox.git'
             sh 'echo $FORECAST_USER'
             sh 'echo $FORECAST_PASSWORD'
           }
+            git 'https://github.com/digitalocean/netbox.git'
 //          sh 'docker-compose build --pull'
 //          sh 'docker-compose up -d'
         } catch(err) {
