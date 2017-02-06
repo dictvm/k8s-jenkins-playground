@@ -23,7 +23,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
   stage ('Wrap Secrets') {
     node ('kubernetes') {
       container('docker') {
-        wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+        wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
           sh 'echo $FORECAST_USER'
           sh 'echo $FORECAST_PASSWORD'
         }
@@ -36,6 +36,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     node ('kubernetes') {
       container('docker') {
         try {
+          wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
           git 'https://github.com/digitalocean/netbox.git'
           sh 'echo $FORECAST_USER'
           sh 'echo $FORECAST_PASSWORD'
