@@ -27,7 +27,6 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     node ('kubernetes') {
       container('docker') {
         wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-          sh 'echo $FORECAST_PASSWORD'
           sh 'echo $FORECAST_USER'
         }
       }
@@ -40,7 +39,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       container('docker') {
         try {
           git 'https://github.com/digitalocean/netbox.git'
-          sh 'echo $FORECAST_PASSWORD'
+          sh 'echo $FORECAST_USER'
           sh 'docker-compose build --pull'
           sh 'docker-compose up -d'
         } catch(err) {
