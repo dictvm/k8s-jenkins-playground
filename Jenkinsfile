@@ -3,8 +3,9 @@
 
 def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
 def secrets = [
-  [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
+  [$class: 'VaultSecret', path: 'secret/forecast', secretValues: [
     [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
+    [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user']
     ]
   ]
 ]
@@ -23,7 +24,8 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     node ('kubernetes') {
       container('docker') {
         wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-         // sh 'echo $FORECAST_PASSWORD'
+          sh 'echo $FORECAST_PASSWORD'
+          sh 'echo $FORECAST_USER'
         }
       }
     }
@@ -35,7 +37,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       container('docker') {
         try {
           git 'https://github.com/digitalocean/netbox.git'
-          // sh 'echo $FORECAST_PASSWORD'
+          sh 'echo $FORECAST_PASSWORD'
           sh 'docker-compose build --pull'
           sh 'docker-compose up -d'
         } catch(err) {
