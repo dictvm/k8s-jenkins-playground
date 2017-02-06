@@ -37,9 +37,10 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       container('docker') {
         try {
           wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
-          git 'https://github.com/digitalocean/netbox.git'
-          sh 'echo $FORECAST_USER'
-          sh 'echo $FORECAST_PASSWORD'
+            git 'https://github.com/digitalocean/netbox.git'
+            sh 'echo $FORECAST_USER'
+            sh 'echo $FORECAST_PASSWORD'
+          }
 //          sh 'docker-compose build --pull'
 //          sh 'docker-compose up -d'
         } catch(err) {
