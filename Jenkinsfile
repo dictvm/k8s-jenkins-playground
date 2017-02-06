@@ -13,6 +13,8 @@ podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
     name: 'docker',
     image: 'docker/compose:1.9.0',
+    ttyEnabled: true,
+    command: 'cat'
   )
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
