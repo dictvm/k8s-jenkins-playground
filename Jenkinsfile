@@ -12,7 +12,7 @@ def secrets = [
 podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
     name: 'docker',
-    image: 'docker/compose:1.9.0',
+    image: 'docker/compose:1.10.0',
     ttyEnabled: true,
     command: 'cat'
   )
