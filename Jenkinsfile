@@ -2,19 +2,13 @@
 // vim: set ft=groovy:
 
 def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
-def secrets = [
-  [$class: 'VaultSecret', path: 'secret/forecast/auth', secretValues: [
-    [$class: 'VaultSecretValue',
-      envVar: 'FORECAST_USER',
-      vaultKey: 'user'
-      ]
-    [$class: 'VaultSecretValue',
-      envVar: 'FORECAST_PASSWORD',
-      vaultKey: 'password'
-      ]
-    ]
+
+def fc_secrets = [
+    [$class: 'VaultSecret', path: 'secret/forecast/auth',
+      secretValues: [
+        [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
+        [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']]]
   ]
-]
 
 podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
