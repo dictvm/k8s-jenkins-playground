@@ -11,7 +11,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 
   stage ('Pull Secrets')
   node ('kubernetes') {
-//    container('docker') {
+    container('docker') {
       def secrets = [
         [$class: 'VaultSecret', path: 'secret/forecast/password', secretValues: [
           [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']
@@ -21,7 +21,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
         sh 'echo $FORECAST_PASSWORD'
       }
-//    }
+    }
   }
   
   
