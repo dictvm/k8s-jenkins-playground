@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 // vim: set ft=groovy:
 
-def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
+// def image = "invisionag/testimage:build-${env.BUILD_NUMBER}"
 
 
 
@@ -18,7 +18,7 @@ podTemplate(label: 'kubernetes', containers: [
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
-  stage ('Wrap Secrets') {
+  stage ('Gather Secrets') {
     node ('kubernetes') {
       container('docker') {
         def fc_secrets = [
@@ -35,6 +35,14 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     }
   }
   
+  stage ('Checkout') {
+    node {
+      container('docker' {
+          git 'https://github.com/digitalocean/netbox.git'
+      }
+    }
+  }
+
   stage ('Build') {
     node ('kubernetes') {
       container('docker') {
@@ -44,7 +52,6 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
             sh 'echo $FORECAST_PASSWORD'
           }
           sh 'docker-compose build --pull'
-          git 'https://github.com/digitalocean/netbox.git'
           sh 'docker-compose up -d'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
