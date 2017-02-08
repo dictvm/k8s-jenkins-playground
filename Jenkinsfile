@@ -37,7 +37,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
   
   stage ('Checkout') {
     node {
-      container('docker' {
+      container('docker') {
           git 'https://github.com/digitalocean/netbox.git'
       }
     }
