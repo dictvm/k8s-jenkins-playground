@@ -22,8 +22,8 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
         ]
       ]
       wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-        sh 'echo env.FORECAST_USER'
-        sh 'echo env.FORECAST_PASSWORD'
+        sh 'echo $FORECAST_USER'
+        sh 'echo $FORECAST_PASSWORD'
       }
     }
     
@@ -37,8 +37,8 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
       container('docker') {
         try {
           wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-            sh 'echo env.FORECAST_USER'
-            sh 'echo env.FORECAST_PASSWORD'
+            sh 'echo $FORECAST_USER'
+            sh 'echo $FORECAST_PASSWORD'
           }
           sh 'docker-compose build --pull'
           sh 'docker-compose up -d'
