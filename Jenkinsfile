@@ -40,15 +40,15 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     stage ('Build something') {
       container('docker') {
         try {
-          sh 'docker-compose build --pull'
-          sh 'docker-compose up -d'
+//          sh 'docker-compose build --pull'
+//          sh 'docker-compose up -d'
         } catch(err) {
-          sh 'docker-compose down -v --remove-orphans'
+//          sh 'docker-compose down -v --remove-orphans'
           throw err
         } finally {
           // print secrets again
           wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-            sh "docker-compose down -v --remove-orphans"
+//            sh "docker-compose down -v --remove-orphans"
             sh 'echo $FORECAST_USER'
             sh 'echo $FORECAST_PASSWORD'
           }
