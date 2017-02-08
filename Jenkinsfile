@@ -19,7 +19,8 @@ podTemplate(label: 'kubernetes', containers: [
     envVars: [
       containerEnvVar(key: 'FORECAST_USER', value: '${password}')
     ]
-])),
+  )
+],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
   stage ('Wrap Secrets') {
@@ -41,8 +42,8 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
             sh 'echo $FORECAST_USER'
             sh 'echo $FORECAST_PASSWORD'
           }
-            git 'https://github.com/digitalocean/netbox.git'
 //          sh 'docker-compose build --pull'
+            git 'https://github.com/digitalocean/netbox.git'
 //          sh 'docker-compose up -d'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
