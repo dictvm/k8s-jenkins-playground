@@ -10,10 +10,10 @@ podTemplate(label: 'kubernetes', containers: [
     name: 'docker',
     image: 'docker/compose:1.10.0',
     ttyEnabled: true,
-    command: 'cat',
-    envVars: [
-      containerEnvVar(key: 'FORECAST_USER', value: '$password')
-    ]
+    command: 'cat'
+//    envVars: [
+//      containerEnvVar(key: 'FORECAST_USER', value: '')
+//    ]
   )
 ],
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
