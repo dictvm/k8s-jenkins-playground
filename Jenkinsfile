@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 // vim: set ft=groovy:
 
-def app_name = 'testing.daniel.k8s.ivx.cloud'
+//def app_name = 'testing.daniel.k8s.ivx.cloud'
 
 podTemplate(label: 'kubernetes', containers: [
   containerTemplate(
@@ -18,8 +18,9 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     def secrets = [
       [$class: 'VaultSecret', path: 'secret/forecast/auth', secretValues: [
         [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
-        [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']]
-      ]
+        [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey: 'password']]],
+      [$class: 'VaultSecret', path: 'secret/envoy/auth', secretValues: [
+        [$class: 'VaultSecretValue', envVar: 'ENVOY_PASSWORD', vaultKey: 'password']]]
     ]
     
     stage ('Show Secrets') {
