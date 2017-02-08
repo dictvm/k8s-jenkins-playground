@@ -14,39 +14,43 @@ podTemplate(label: 'kubernetes', containers: [
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
   node {
-    stage ('Gather Secrets') {
-      def secrets = [
-        [$class: 'VaultSecret', path: 'secret/forecast/auth', secretValues: [
-          [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
-          [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']]
-        ]
+    // get secrets from vault
+    def secrets = [
+      [$class: 'VaultSecret', path: 'secret/forecast/auth', secretValues: [
+        [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
+        [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']]
       ]
+    ]
+    
+    stage ('Show Secrets') {
+      // secrets should be available
       wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
         sh 'echo $FORECAST_USER'
         sh 'echo $FORECAST_PASSWORD'
       }
     }
     
-    stage ('Checkout') {
+    stage ('Checkout example') {
       container('docker') {
         git 'https://github.com/digitalocean/netbox.git'
       }
     }
   
-    stage ('Build') {
+    stage ('Build something') {
       container('docker') {
         try {
-          wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-            sh 'echo $FORECAST_USER'
-            sh 'echo $FORECAST_PASSWORD'
-          }
           sh 'docker-compose build --pull'
           sh 'docker-compose up -d'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
           throw err
         } finally {
-          sh "docker-compose down -v --remove-orphans"
+          // print secrets again
+          wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+            sh "docker-compose down -v --remove-orphans"
+            sh 'echo $FORECAST_USER'
+            sh 'echo $FORECAST_PASSWORD'
+          }
         }
       }
     }
