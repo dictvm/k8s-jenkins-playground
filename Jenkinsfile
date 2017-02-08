@@ -43,9 +43,9 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
             sh 'echo $FORECAST_USER'
             sh 'echo $FORECAST_PASSWORD'
           }
-//          sh 'docker-compose build --pull'
-            git 'https://github.com/digitalocean/netbox.git'
-//          sh 'docker-compose up -d'
+          sh 'docker-compose build --pull'
+          git 'https://github.com/digitalocean/netbox.git'
+          sh 'docker-compose up -d'
         } catch(err) {
           sh 'docker-compose down -v --remove-orphans'
           throw err
