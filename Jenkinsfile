@@ -26,8 +26,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
     stage ('Show Secrets') {
       // secrets should be available
       wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
-        sh 'echo $FORECAST_USER'
-        sh 'echo $FORECAST_PASSWORD'
+        sh 'echo $FORECAST_USER && echo $FORECAST_PASSWORD'
       }
     }
     
@@ -49,8 +48,7 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
           // print secrets again
           wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
 //            sh "docker-compose down -v --remove-orphans"
-            sh 'echo $FORECAST_USER'
-            sh 'echo $FORECAST_PASSWORD'
+            sh 'echo $FORECAST_USER && echo $FORECAST_PASSWORD'
           }
         }
       }
