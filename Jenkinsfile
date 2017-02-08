@@ -15,19 +15,17 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
 
   node {
     stage ('Gather Secrets') {
-      container('docker') {
-        def fc_secrets = [
-          [$class: 'VaultSecret', path: 'secret/forecast/auth',
-            secretValues: [
-              [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
-              [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']
-            ]
+      def fc_secrets = [
+        [$class: 'VaultSecret', path: 'secret/forecast/auth',
+          secretValues: [
+            [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
+            [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']
           ]
         ]
-        wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
-          sh 'echo $FORECAST_USER'
-          sh 'echo $FORECAST_PASSWORD'
-        }
+      ]
+      wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
+        sh 'echo $FORECAST_USER'
+        sh 'echo $FORECAST_PASSWORD'
       }
     }
     
