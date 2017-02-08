@@ -15,7 +15,7 @@ podTemplate(label: 'kubernetes', containers: [
     name: 'docker',
     image: 'docker/compose:1.10.0',
     ttyEnabled: true,
-    command: 'cat'
+    command: 'cat',
     envVars: [
       containerEnvVar(key: 'FORECAST_USER', value: '${password}')
     ]
