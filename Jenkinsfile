@@ -19,7 +19,7 @@ podTemplate(label: 'kubernetes', containers: [
     envVars: [
       containerEnvVar(key: 'FORECAST_USER', value: '${password}')
     ]
-],
+])),
 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
   stage ('Wrap Secrets') {
