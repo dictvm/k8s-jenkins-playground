@@ -25,7 +25,9 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
             [$class: 'VaultSecret', path: 'secret/forecast/auth',
               secretValues: [
                 [$class: 'VaultSecretValue', envVar: 'FORECAST_USER', vaultKey: 'user'],
-                [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']]]
+                [$class: 'VaultSecretValue', envVar: 'FORECAST_PASSWORD', vaultKey:  'password']
+              ]
+            ]
         ]
         wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
           sh 'echo $FORECAST_USER'
@@ -37,29 +39,25 @@ volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/
   
   stage ('Checkout') {
     node {
-      container('docker') {
-          git 'https://github.com/digitalocean/netbox.git'
-      }
+      git 'https://github.com/digitalocean/netbox.git'
     }
   }
 
   stage ('Build') {
     node ('kubernetes') {
-      container('docker') {
-        try {
-          wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
-            sh 'echo $FORECAST_USER'
-            sh 'echo $FORECAST_PASSWORD'
-          }
-          sh 'docker-compose build --pull'
-          sh 'docker-compose up -d'
-        } catch(err) {
-          sh 'docker-compose down -v --remove-orphans'
-          throw err
-        } finally {
-          sh "docker-compose down -v --remove-orphans"
+      try {
+        wrap([$class: 'VaultBuildWrapper', vaultSecrets: fc_secrets]) {
+          sh 'echo $FORECAST_USER'
+          sh 'echo $FORECAST_PASSWORD'
         }
-      } 
+        sh 'docker-compose build --pull'
+        sh 'docker-compose up -d'
+      } catch(err) {
+        sh 'docker-compose down -v --remove-orphans'
+        throw err
+      } finally {
+        sh "docker-compose down -v --remove-orphans"
+      }
     } 
   }
 }
